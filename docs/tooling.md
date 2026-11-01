@@ -13,7 +13,7 @@ Last updated: 2026-10-28
 | AWS CLI | 2.38.6 |
 | gh | 2.103.3 |
 | jq | 1.8.1 | 
-| yq | 4.2.0 | 
+| yq | 4.54.1 | 
 | Python | 3.14.4 | 
 | shellcheck | 0.11.0 |
 | pre-commit | 4.5.1 |
