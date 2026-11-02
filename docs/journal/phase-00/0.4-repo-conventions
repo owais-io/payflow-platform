@@ -1,0 +1,65 @@
+# Task 0.4 — Repo conventions
+
+| Field | Value |
+|---|---|
+| Phase | Phase 0 — Environment and accounts |
+| Date | 2026-11-02 |
+| Status | Done |
+
+## Goal
+To setup the complete repo skeleton, pre-commit config and explaining the contribution procedure to this repo.
+
+## What I did
+
+1.  Folder skeleton
+
+- Git doesn’t track empty folders, so put an empty .gitkeep file in each one (touch <dir>/.gitkeep). Delete each .gitkeep once the folder has real files.
+
+2. pre-commit
+
+- pre-commit runs checks automatically on every git commit and blocks bad commits before they reach GitHub. Create .pre-commit-config.yaml at the root of payflow-platform:
+
+```yaml
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+        exclude: ^charts/.*/templates/   # Helm templates aren't valid YAML until rendered
+      - id: check-added-large-files
+      - id: detect-private-key
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.10.0.1
+    hooks:
+      - id: shellcheck
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.96.0
+    hooks:
+      - id: terraform_fmt
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.0
+    hooks:
+      - id: ruff
+      - id: ruff-format
+```
+
+Then, in each repo:
+
+```bash
+pre-commit autoupdate        # replaces the rev: versions above with the latest releases
+pre-commit install           # hooks into git commit
+pre-commit run --all-files   # first full run; fixes whitespace etc.
+```
+
+autoupdate matters here: the versions above are only a starting point and may be outdated.
+
+3. CONTRIBUTING.md
+
+- Branch names: feat/, fix/, docs/, ci/, chore/ plus a short description
+- Commits: Conventional Commits, with 2–3 examples
+- Flow: branch → PR → squash-merge, never push to main
+- pre-commit: install it before your first commit
+- Journal: one entry per task, in payflow-platform/docs/journal/ (in the platform repo only)
