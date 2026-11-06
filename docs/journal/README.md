@@ -12,3 +12,4 @@ One entry per task, in build order.
 - [1.1 Design the app](phase-01/1.1-design-the-app.md) — 2026-11-03
 - [1.2 accounts-api FastAPI](phase-01/1.2-accounts-api.md) — 2026-11-04
 - [1.3 payments-api FastAPI](phase-01/1.3-payments-api.md) — 2026-11-06
+- [1.4 notification-worker](phase-01/1.4-notification-worker.md) — 2026-11-06
