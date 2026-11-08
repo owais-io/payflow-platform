@@ -20,3 +20,4 @@ One entry per task, in build order.
 - [2.1 Dockerfiles](phase-02/2.1-dockerfiles.md) — 2026-11-08
 - [2.2 Image size and security checks](phase-02/2.2-image-size-and-security.md) — 2026-11-08
 - [2.3 docker-compose](phase-02/2.3-docker-compose.md) — 2026-11-08
+- [2.4 First script: smoke test (Phase 2 wrap-up)](phase-02/2.4-first-script.md) — 2026-11-08
