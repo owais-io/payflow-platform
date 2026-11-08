@@ -1,0 +1,13 @@
+# metrics-server on the local kind cluster.
+# Chart: metrics-server/metrics-server <version> (pinned)
+#
+# Install:
+#   helm upgrade --install metrics-server metrics-server/metrics-server \
+#     -n kube-system -f kind/metrics-server-values.yaml --version 3.14.0
+
+# Appended after the chart's defaultArgs (cert-dir, address types, resolution).
+args:
+  # kind only: kind's kubelets serve self-signed certificates without the node IPs,
+  # so metrics-server can't verify them and never becomes Ready.
+  # Do NOT carry this into the EKS overlay: EKS kubelets have valid certificates.
+  - --kubelet-insecure-tls
