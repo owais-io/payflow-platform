@@ -17,3 +17,6 @@ Last updated: 2026-10-28
 | Python | 3.14.4 |
 | shellcheck | 0.11.0 |
 | pre-commit | 4.5.1 |
+| Trivy | 0.76.1 |
+| hadolint | 2.15.1 |
+| cosign | 1.25.0 |
