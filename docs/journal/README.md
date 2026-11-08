@@ -21,3 +21,7 @@ One entry per task, in build order.
 - [2.2 Image size and security checks](phase-02/2.2-image-size-and-security.md) — 2026-11-08
 - [2.3 docker-compose](phase-02/2.3-docker-compose.md) — 2026-11-08
 - [2.4 First script: smoke test (Phase 2 wrap-up)](phase-02/2.4-first-script.md) — 2026-11-08
+
+
+## Phase 3 — Kubernetes (plain manifests first)
+- [3.1 Local cluster](phase-03/3.1-local-cluster.md) — 2026-11-08
