@@ -1,0 +1,66 @@
+# Traefik on the local kind cluster, Gateway API only.
+#
+# Pinned together, upgrade together:
+#   Traefik chart:      42.3.1  (Traefik v3.7.17)
+#   Gateway API CRDs:   v1.6.3  (Standard channel) - the version Traefik v3.7 supports
+# Before bumping the chart, check the new version's Gateway provider docs page
+# for its supported Gateway API version and update the CRDs to match.
+#
+# Install (CRDs are applied separately, so the chart's own are skipped):
+#   helm upgrade --install traefik traefik/traefik \
+#     -n traefik --create-namespace \
+#     -f kind/traefik-values.yaml --version 42.3.1 --skip-crds
+
+providers:
+  # Routing comes only from Gateway API resources (Gateway, HTTPRoute).
+  kubernetesGateway:
+    enabled: true
+  # Not used in PayFlow: no Ingress objects, no Traefik IngressRoute CRDs.
+  kubernetesIngress:
+    enabled: false
+  kubernetesCRD:
+    enabled: false
+
+# No IngressClass, since the Ingress provider is off.
+ingressClass:
+  enabled: false
+
+# Creates the cluster-scoped GatewayClass "traefik" (default, kept explicit).
+gatewayClass:
+  enabled: true
+
+# Don't let the chart create a Gateway; PayFlow's own Gateway is written in Task 3.4.
+gateway:
+  enabled: false
+
+# Entrypoints listen on 8000/8443 inside the container (non-root, so no ports < 1024).
+# hostPort binds them to 80/443 on the node, which kind maps to 127.0.0.1:80/443 on the laptop.
+# Gateway listeners must use 8000/8443 (the entrypoint ports), not 80/443.
+ports:
+  web:
+    hostPort: 80
+  websecure:
+    hostPort: 443
+
+# kind has no load balancer; traffic arrives through hostPort, so a ClusterIP Service is enough.
+service:
+  spec:
+    type: ClusterIP
+
+# Run on the node that owns the port mappings (labelled in kind/cluster.yaml) ...
+nodeSelector:
+  ingress-ready: "true"
+
+# ... which is the control-plane, tainted NoSchedule in a multi-node kind cluster.
+tolerations:
+  - key: node-role.kubernetes.io/control-plane
+    operator: Exists
+    effect: NoSchedule
+
+# Only one pod can hold hostPort 80/443 on that node, so replace the old pod
+# before starting the new one (the chart default surges and would hang Pending).
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+    maxSurge: 0
