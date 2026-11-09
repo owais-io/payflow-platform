@@ -1,21 +1,21 @@
+# Headless Service (clusterIP: None): DNS returns the pod IP directly,
+# e.g. postgres-0.postgres.payflow-dev.svc.cluster.local. Required by the StatefulSet's serviceName.
 apiVersion: v1
 kind: Service
 metadata:
-  labels:
-    app: postgres
   name: postgres
   namespace: payflow-dev
+  labels:
+    app.kubernetes.io/name: postgres
+    app.kubernetes.io/part-of: payflow
+    app.kubernetes.io/component: database
 spec:
   clusterIP: None
-  ports:
-  - name: 5432-5432
-    port: 5432
-    protocol: TCP
-    targetPort: 5432
   selector:
     app.kubernetes.io/name: postgres
-    app.kubernetes.io/component: database
     app.kubernetes.io/part-of: payflow
-  type: ClusterIP
-status:
-  loadBalancer: {}
+  ports:
+  - name: postgres
+    port: 5432
+    targetPort: postgres
+    protocol: TCP

@@ -1,22 +1,14 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  annotations:
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"v1","kind":"Namespace","metadata":{"annotations":{},"creationTimestamp":"2026-11-08T17:51:27Z","labels":{"app.kubernetes.io/part-of":"payflow","environment":"dev","kubernetes.io/metadata.name":"payflow-dev"},"name":"payflow-dev","resourceVersion":"10182","uid":"e6cab870-4ca9-4844-9e41-d77a7434a811"},"spec":{"finalizers":["kubernetes"]},"status":{"phase":"Active"}}
-  creationTimestamp: "2026-11-08T17:51:27Z"
+  name: payflow-dev
   labels:
     app.kubernetes.io/part-of: payflow
     environment: dev
-    kubernetes.io/metadata.name: payflow-dev
-    pod-security.kubernetes.io/audit: restricted
+    # Pod Security Admission: enforce baseline now; warn and audit against restricted,
+    # so every apply lists what would still break under restricted.
+    # Not enforcing restricted yet: the official postgres image needs its own settings
+    # (see 11-postgres-statefulset.yaml) and is reviewed again in Task 3.3.3.
     pod-security.kubernetes.io/enforce: baseline
     pod-security.kubernetes.io/warn: restricted
-  name: payflow-dev
-  resourceVersion: "10255"
-  uid: e6cab870-4ca9-4844-9e41-d77a7434a811
-spec:
-  finalizers:
-  - kubernetes
-status:
-  phase: Active
+    pod-security.kubernetes.io/audit: restricted
