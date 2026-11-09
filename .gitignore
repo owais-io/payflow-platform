@@ -49,3 +49,4 @@ __pycache__/
 .venv/
 .pytest_cache/
 .env
+k8s/raw/postgres.env
