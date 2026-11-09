@@ -24,7 +24,7 @@ spec:
       automountServiceAccountToken: false
       containers:
       - image: ghcr.io/owais-io/payflow-payments-api:0.2.0
-        name: accounts-migrate
+        name: payments-migrate
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
