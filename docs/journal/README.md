@@ -25,3 +25,4 @@ One entry per task, in build order.
 
 ## Phase 3 — Kubernetes (plain manifests first)
 - [3.1 Local cluster](phase-03/3.1-local-cluster.md) — 2026-11-08
+- [3.2 Data layer](phase-03/3.2-data-layer.md) — 2026-11-09
