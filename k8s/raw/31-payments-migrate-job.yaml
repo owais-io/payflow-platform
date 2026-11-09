@@ -1,0 +1,49 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: payments-migrate
+  namespace: payflow-dev
+  labels:
+    app.kubernetes.io/name: payments-migrate
+    app.kubernetes.io/component: migration
+    app.kubernetes.io/part-of: payflow
+spec:
+  backoffLimit: 3
+  activeDeadlineSeconds: 300
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: payments-migrate
+        app.kubernetes.io/component: migration
+        app.kubernetes.io/part-of: payflow
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      automountServiceAccountToken: false
+      containers:
+      - image: ghcr.io/owais-io/payflow-payments-api:0.2.0
+        name: accounts-migrate
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          readOnlyRootFilesystem: true
+        env:
+        - name: POSTGRES_USER
+          valueFrom: { secretKeyRef: { name: postgres-credentials, key: POSTGRES_USER } }
+        - name: POSTGRES_PASSWORD
+          valueFrom: { secretKeyRef: { name: postgres-credentials, key: POSTGRES_PASSWORD } }
+        - name: POSTGRES_DB
+          valueFrom: { secretKeyRef: { name: postgres-credentials, key: POSTGRES_DB } }
+        - name: DATABASE_URL
+          value: postgresql+psycopg://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgres:5432/$(POSTGRES_DB)
+        command: ["alembic", "upgrade", "head"]
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            memory: "256Mi"
+      restartPolicy: Never
